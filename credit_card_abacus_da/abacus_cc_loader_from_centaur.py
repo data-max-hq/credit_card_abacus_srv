@@ -1,6 +1,6 @@
 import pandas as pd
-from cc_centaur_da import CCCentaurDA
-from cc_abacus_da import CC_AbacusDA
+from .cc_centaur_da import CCCentaurDA
+from .cc_abacus_da import CC_AbacusDA
 import logging
 
 class AbacusCCLoaderFromCentaur:
