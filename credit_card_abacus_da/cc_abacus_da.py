@@ -3,7 +3,9 @@ import os
 from datetime import datetime
 from io import StringIO
 import pandas as pd
-from log import Log
+from psycopg2 import sql
+
+from .log import Log
 import dotenv
 
 dotenv.load_dotenv()
