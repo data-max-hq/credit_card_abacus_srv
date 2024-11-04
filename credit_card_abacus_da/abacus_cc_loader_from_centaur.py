@@ -1,6 +1,6 @@
 import pandas as pd
 from cc_centaur_da import CCCentaurDA
-from cc_abacus_da import CCAbacusDA
+from cc_abacus_da import CC_AbacusDA
 import logging
 
 class AbacusCCLoaderFromCentaur:
@@ -18,7 +18,7 @@ class AbacusCCLoaderFromCentaur:
         start = pd.Timestamp.now()
 
         centaur = CCCentaurDA()
-        abacus = CCAbacusDA()
+        abacus = CC_AbacusDA()
 
         try:
             abacus.start = start
@@ -74,7 +74,7 @@ class AbacusCCLoaderFromCentaur:
     @staticmethod
     def get_error_records():
         try:
-            abacus = CCAbacusDA()
+            abacus = CC_AbacusDA()
             return abacus.get_error_records()
         except Exception as ex:
             logging.error(f"Error fetching error records: {str(ex)}")
@@ -83,7 +83,7 @@ class AbacusCCLoaderFromCentaur:
     @staticmethod
     def save_error_records(df):
         try:
-            abacus = CCAbacusDA()
+            abacus = CC_AbacusDA()
             return abacus.save_fixed_errors(df)
         except Exception as ex:
             logging.error(f"Error saving error records: {str(ex)}")
@@ -96,7 +96,7 @@ class AbacusCCLoaderFromCentaur:
             return "There are still some duplicates, please fix those first!"
         else:
             try:
-                abacus = CCAbacusDA()
+                abacus = CC_AbacusDA()
                 abacus.commit_fixed_errors_into_t17(is_service)
                 return "Success"
             except Exception as ex:
@@ -115,7 +115,7 @@ class AbacusCCLoaderFromCentaur:
     @staticmethod
     def get_cc_logs():
         try:
-            abacus = CCAbacusDA()
+            abacus = CC_AbacusDA()
             return abacus.get_cc_logs()
         except Exception as ex:
             logging.error(f"Error fetching CC logs: {str(ex)}")
@@ -123,10 +123,10 @@ class AbacusCCLoaderFromCentaur:
 
     @staticmethod
     def is_load_fin():
-        abacus = CCAbacusDA()
+        abacus = CC_AbacusDA()
         return abacus.is_load_fin()
 
     @staticmethod
     def is_ok_to_call_deliquency():
-        abacus = CCAbacusDA()
+        abacus = CC_AbacusDA()
         return abacus.call_deliquency()

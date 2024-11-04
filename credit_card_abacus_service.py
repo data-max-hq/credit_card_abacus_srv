@@ -1,4 +1,6 @@
 import logging
+import os
+
 from zeep import Client
 from zeep.transports import Transport
 from requests import Session
