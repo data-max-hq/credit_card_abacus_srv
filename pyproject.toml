@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "credit_card_abacus_srv"
+name = "credit_card_abacus_da"
 version = "0.1.0"
 description = "Abacus CC - Centaur Service"
 authors = [
