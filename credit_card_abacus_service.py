@@ -4,7 +4,6 @@ import os
 from zeep import Client
 from zeep.transports import Transport
 from requests import Session
-from requests.exceptions import Timeout
 from credit_card_abacus_da.abacus_cc_loader_from_centaur import AbacusCCLoaderFromCentaur
 
 class CreditCardAbacusService:

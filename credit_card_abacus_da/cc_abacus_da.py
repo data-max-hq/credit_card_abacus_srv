@@ -83,7 +83,7 @@ class CC_AbacusDA:
 
             return True
 
-        except Exception as ex:
+        except Exception:
             if is_service:
                 self.update_load_log_cc('1', self.WorkingDay.strftime("%d/%m/%Y"))  # set load to true
             # self.write_cc_log(self.start, datetime.now(), '0', 0, str(ex))
@@ -212,12 +212,12 @@ class CC_AbacusDA:
         # Update ATMP_t17_row's "DATE_SINCE_PAST_DUE" field
         atmp_t17_row["DATE_SINCE_PAST_DUE"] = self.WorkingDay - pd.to_timedelta(int(atmp_t17_row["DAYS_PAST_DUE"]), unit='d')
 
-        last_payment_amount = 0.0
-        last_minimum_payment = 0.0
-        last_sum_of_payment = 0.0
-        last_period = 30000101
+        #last_payment_amount = 0.0
+        #last_minimum_payment = 0.0
+        #last_sum_of_payment = 0.0
+        #last_period = 30000101
         nr_payments_past_due = 0
-        last_due_date_dlq = pd.NaT  # Pandas equivalent of DateTime.MinValue
+        #last_due_date_dlq = pd.NaT  # Pandas equivalent of DateTime.MinValue
 
         # Check if there are rows in t18rows
         if not t18rows.empty:
@@ -242,7 +242,7 @@ class CC_AbacusDA:
                 # Compare PERIOD values to decide further logic
                 if int(t18row["PERIOD"]) == int(atmp_t17_row["PERIOD"]):
                     atmp_t18_row["LAST_SUM_OF_PAYMENT"] = atmp_t17_row["SUM_OF_PAYMENTS"]
-                    last_payment_amount = float(atmp_t17_row["SUM_OF_PAYMENTS"]) - float(t18row["LAST_SUM_OF_PAYMENT"])
+                    #last_payment_amount = float(atmp_t17_row["SUM_OF_PAYMENTS"]) - float(t18row["LAST_SUM_OF_PAYMENT"])
 
                     if self.WorkingDay > pd.to_datetime(atmp_t18_row["PRINCIPAL_PAYMENT_DATE"]):
                         atmp_t18_row["IS_PASTDUE"] = "1"
@@ -255,10 +255,10 @@ class CC_AbacusDA:
                     nr_payments_past_due += 1
 
                 # Convert fields to the appropriate types and store the values
-                last_minimum_payment = float(atmp_t18_row.get("MINIMUM_PAYMENT", 0))
-                last_period = int(atmp_t18_row.get("PERIOD", 30000101))
-                last_due_date_dlq = pd.to_datetime(atmp_t18_row.get("DUE_DATE_DLQ", pd.NaT))
-                last_sum_of_payment = float(atmp_t18_row.get("LAST_SUM_OF_PAYMENT", 0))
+                #last_minimum_payment = float(atmp_t18_row.get("MINIMUM_PAYMENT", 0))
+                #last_period = int(atmp_t18_row.get("PERIOD", 30000101))
+                #last_due_date_dlq = pd.to_datetime(atmp_t18_row.get("DUE_DATE_DLQ", pd.NaT))
+                #last_sum_of_payment = float(atmp_t18_row.get("LAST_SUM_OF_PAYMENT", 0))
 
                 # Append the new row to ATMP_T18 DataFrame
                 atmp_t18 = atmp_t18.append(atmp_t18_row, ignore_index=True)

@@ -36,7 +36,7 @@ class AbacusCCLoaderFromCentaur:
                     return AbacusCCLoaderFromCentaur.clean_and_load_cc(centaur, abacus, is_service)
                 else:
                     return AbacusCCLoaderFromCentaur.LoadStatus.FINISHED
-        except Exception as ex:
+        except Exception:
             # abacus.write_cc_log_file(start, pd.Timestamp.now(), "0", 0, str(ex))
             return AbacusCCLoaderFromCentaur.LoadStatus.ERROR
 

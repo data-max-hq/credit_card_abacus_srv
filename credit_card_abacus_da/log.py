@@ -1,6 +1,4 @@
-import psycopg2
 import pandas as pd
-from datetime import datetime
 
 class Log:
     def __init__(self):

@@ -61,6 +61,6 @@ class CCCentaurDA:
             month = int(value[4:6])
             day = int(value[6:8])
             return datetime(year, month, day)
-        except Exception as ex:
+        except Exception:
             # If parsing fails, return a default date or handle error appropriately
             return datetime.min

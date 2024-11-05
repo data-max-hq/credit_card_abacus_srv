@@ -22,6 +22,8 @@ requests-file = "2.1.0"
 requests-toolbelt = "1.0.0"
 pandas = "2.2.3"
 numpy = "2.1.2"
+pre-commit = "^4.0.1"
+ruff = "^0.7.2"
 
 [build-system]
 requires = ["poetry-core"]
