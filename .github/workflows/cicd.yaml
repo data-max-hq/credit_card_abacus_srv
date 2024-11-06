@@ -1,0 +1,65 @@
+name: CI/CD Workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+  push:
+    branches:
+      - main
+
+env:
+  BRANCH_NAME: ${{ github.ref_name }}
+  COMMIT_HASH: ${{ github.sha }}
+  BUCKET_NAME: abacus-internal-glue-artefacts
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'pull_request' && (github.base_ref == 'main' || github.base_ref == 'dev')) || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Run pre-commit
+        run: poetry run pre-commit run --all-files
+
+      - name: Run tests
+        run: poetry run pytest tests/
+
+  build-and-upload-docker-image:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.base_ref == 'main' || github.base_ref == 'dev'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and tag Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: |
+            myapp:${{ env.BRANCH_NAME }}-latest
+            myapp:${{ env.BRANCH_NAME }}-${{ github.sha }}
+
+      - name: Display Docker images
+        run: docker images

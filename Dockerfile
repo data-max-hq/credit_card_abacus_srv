@@ -19,9 +19,6 @@ RUN poetry config virtualenvs.create false && poetry install --no-interaction --
 # Copy the entire project code to the container
 COPY . .
 
-# Ensure the .env file is included
-COPY .env .env
-
 # Set PYTHONPATH to the /app directory
 ENV PYTHONPATH="/app"
 
