@@ -12,17 +12,18 @@ readme = "README.md"
 python = "^3.12"
 
 [tool.poetry.group.dev.dependencies]
-zeep = "4.3.1"
+numpy = "2.1.2"
+pandas = "2.2.3"
+pre-commit = "^3.8.0"
 psycopg2 = "2.9.10"
 psycopg2-binary = "2.9.10"
+pymssql = "2.3.1"
 python-dotenv = "1.0.1"
+pytest = "8.3.3"
 requests = "2.32.3"
 requests-file = "2.1.0"
 requests-toolbelt = "1.0.0"
-pandas = "2.2.3"
-numpy = "2.1.2"
-pymssql = "2.3.1"
-pre-commit = "^3.8.0"
+zeep = "4.3.1"
 
 [build-system]
 requires = ["poetry-core"]
