@@ -40,41 +40,26 @@ jobs:
       - name: Run tests
         run: poetry run pytest tests/
 
-#  deploy:
-#    needs: build-and-test
-#    runs-on: ubuntu-latest
-#    if: github.event_name == 'pull_request' && github.base_ref == 'main'
-#    steps:
-#      - uses: actions/checkout@v3
-#
-#      - name: Set up Python
-#        uses: actions/setup-python@v4
-#        with:
-#          python-version: '3.12'
-#
-#      - name: Install Poetry
-#        run: |
-#          curl -sSL https://install.python-poetry.org | python3 -
-#          echo "$HOME/.local/bin" >> $GITHUB_PATH
-#
-#      - name: Install dependencies
-#        run: poetry install
-#
-#      - name: Configure AWS credentials
-#        uses: aws-actions/configure-aws-credentials@v1
-#        with:
-#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          aws-region: ${{ secrets.AWS_REGION }}
-#
-#      - name: Build package
-#        run: poetry build
-#
-#      - name: Deploy
-#        run: |
-#          aws glue create-job \
-#            --name abacus-job-latest \
-#            --role arn:aws:iam::925061584404:role/glue-service-account-role \
-#            --command Name=glueetl,ScriptLocation=s3://${{ env.BUCKET_NAME }}/${{ env.BRANCH_NAME }}/latest/main.py \
-#            --default-arguments '{"--extra-py-files": "s3://${{ env.BUCKET_NAME }}/${{ env.BRANCH_NAME }}/latest/abacus.whl"}' \
-#            --glue-version "3.0"
+  build-and-upload-docker-image:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.base_ref == 'main' || github.base_ref == 'dev'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and tag Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: |
+            myapp:${{ env.BRANCH_NAME }}-latest
+            myapp:${{ env.BRANCH_NAME }}-${{ github.sha }}
+
+      - name: Display Docker images
+        run: docker images
