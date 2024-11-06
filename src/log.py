@@ -1,6 +1,5 @@
-import psycopg2
 import pandas as pd
-from datetime import datetime
+
 
 class Log:
     def __init__(self):
@@ -19,9 +18,20 @@ class Log:
             VALUES (%s, %s, %s, %s, %s, %s, %s, nextval('{schema_used}.
             '))
         """
-        
+
         try:
-            cursor.execute(command_text, (self.LOAD_DATE, self.MODULE, self.START, self.END, self.NO_RECORDS, self.STATUS, self.ERROR))
+            cursor.execute(
+                command_text,
+                (
+                    self.LOAD_DATE,
+                    self.MODULE,
+                    self.START,
+                    self.END,
+                    self.NO_RECORDS,
+                    self.STATUS,
+                    self.ERROR,
+                ),
+            )
             con.commit()
             rows_affected = cursor.rowcount
             cursor.close()
@@ -42,11 +52,11 @@ class Log:
             f"End: {self.END}",
             f"No. of Records: {self.NO_RECORDS}",
             f"Status: {self.STATUS}",
-            f"Error Text: {self.ERROR}"
+            f"Error Text: {self.ERROR}",
         ]
         try:
-            with open(file_name, 'w') as file:
-                file.write('\n'.join(lines_log))
+            with open(file_name, "w") as file:
+                file.write("\n".join(lines_log))
             return True
         except Exception as ex:
             raise Exception(f"Failed to write log to file: {str(ex)}")
@@ -61,8 +71,8 @@ class Log:
             if con.closed == 0:
                 con.close()
 
-            if status is not None and status != '':
-                return status == '1'
+            if status is not None and status != "":
+                return status == "1"
             return False
         except Exception as ex:
             raise Exception(f"Failed to find log: {str(ex)}")

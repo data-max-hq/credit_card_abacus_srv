@@ -3,6 +3,7 @@ from .cc_centaur_da import CCCentaurDA
 from .cc_abacus_da import CC_AbacusDA
 import logging
 
+
 class AbacusCCLoaderFromCentaur:
     duplicate_df = None
     atmpT17 = None
@@ -28,15 +29,19 @@ class AbacusCCLoaderFromCentaur:
 
             if not is_service:
                 if abacus.is_load_fin():
-                    return AbacusCCLoaderFromCentaur.clean_and_load_cc(centaur, abacus, is_service)
+                    return AbacusCCLoaderFromCentaur.clean_and_load_cc(
+                        centaur, abacus, is_service
+                    )
                 else:
                     return AbacusCCLoaderFromCentaur.LoadStatus.WAITING_FOR_FIN
             else:
                 if not abacus.is_finished_cc():
-                    return AbacusCCLoaderFromCentaur.clean_and_load_cc(centaur, abacus, is_service)
+                    return AbacusCCLoaderFromCentaur.clean_and_load_cc(
+                        centaur, abacus, is_service
+                    )
                 else:
                     return AbacusCCLoaderFromCentaur.LoadStatus.FINISHED
-        except Exception as ex:
+        except Exception:
             # abacus.write_cc_log_file(start, pd.Timestamp.now(), "0", 0, str(ex))
             return AbacusCCLoaderFromCentaur.LoadStatus.ERROR
 
@@ -46,11 +51,11 @@ class AbacusCCLoaderFromCentaur:
             df_atmp_t17 = centaur.get_cc_data()
 
             # Add required columns
-            df_atmp_t17['NUMBER_OF_PAYMENTS_PAST_DUE'] = 0
-            df_atmp_t17['DATE_SINCE_PAST_DUE'] = pd.NaT
-            df_atmp_t17['CARD_BALANCE'] = 0.0
-            df_atmp_t17['DPD_HO'] = 0
-            df_atmp_t17['IS_JOINT'] = 0
+            df_atmp_t17["NUMBER_OF_PAYMENTS_PAST_DUE"] = 0
+            df_atmp_t17["DATE_SINCE_PAST_DUE"] = pd.NaT
+            df_atmp_t17["CARD_BALANCE"] = 0.0
+            df_atmp_t17["DPD_HO"] = 0
+            df_atmp_t17["IS_JOINT"] = 0
 
             # # Clean duplicate data
             # duplicate_df = AbacusCCLoaderFromCentaur.clean_centaur_cc_data(df_atmp_t17)
@@ -91,7 +96,7 @@ class AbacusCCLoaderFromCentaur:
 
     @staticmethod
     def commit_fixed_errors_into_t17(df, is_service):
-        duplicates = df.groupby('ID_PRODUCT').filter(lambda x: len(x) > 1)
+        duplicates = df.groupby("ID_PRODUCT").filter(lambda x: len(x) > 1)
         if not duplicates.empty:
             return "There are still some duplicates, please fix those first!"
         else:
@@ -106,10 +111,10 @@ class AbacusCCLoaderFromCentaur:
     @staticmethod
     def clean_centaur_cc_data(df):
         # Find and remove duplicate rows based on "ID_PRODUCT"
-        duplicates = df.groupby('ID_PRODUCT').filter(lambda x: len(x) > 1)
+        duplicates = df.groupby("ID_PRODUCT").filter(lambda x: len(x) > 1)
 
         # Remove duplicates from the main dataframe and return them
-        df = df.drop_duplicates(subset='ID_PRODUCT', keep=False)
+        df = df.drop_duplicates(subset="ID_PRODUCT", keep=False)
         return duplicates
 
     @staticmethod
