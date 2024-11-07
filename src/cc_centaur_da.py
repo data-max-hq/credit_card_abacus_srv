@@ -6,11 +6,11 @@ import dotenv
 
 dotenv.load_dotenv()
 
-class CCCentaurDA:
 
+class CCCentaurDA:
     def __init__(self):
         # Connection string fetched from environment variable or config
-        self.connection_string = os.getenv('CentaurConStr')
+        self.connection_string = os.getenv("CentaurConStr")
 
     @property
     def centaur_working_day(self):
@@ -61,6 +61,6 @@ class CCCentaurDA:
             month = int(value[4:6])
             day = int(value[6:8])
             return datetime(year, month, day)
-        except Exception as ex:
+        except Exception:
             # If parsing fails, return a default date or handle error appropriately
             return datetime.min

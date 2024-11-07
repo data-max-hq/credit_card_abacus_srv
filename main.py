@@ -1,4 +1,4 @@
-from credit_card_abacus_service import CreditCardAbacusService
+from src.credit_card_abacus_service import CreditCardAbacusService
 
 if __name__ == "__main__":
     service = CreditCardAbacusService()
