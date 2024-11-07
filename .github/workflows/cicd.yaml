@@ -44,7 +44,7 @@ jobs:
   build-docker-image:
     needs: build-and-test
     runs-on: ubuntu-latest
-    if: (github.base_ref == 'main' || github.base_ref == 'dev') && github.event_name == 'push'
+    if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev') && github.event_name == 'push'
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
