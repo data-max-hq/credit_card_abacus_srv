@@ -11,3 +11,6 @@ The Raiffeisen repo with the C# code is named: rbal-risk-abacus-credit-card . Th
 # Local setup
 - Install poetry
 - MAC: install `brew install freetds`
+
+
+Made with ❤️ by [datamax.ai](https://www.datamax.ai/).
